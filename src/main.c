@@ -3,6 +3,11 @@
 #include <err.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#include "parser/parser.h"
 
 int analyse_args(int argc, char **argv)
 {
@@ -16,11 +21,37 @@ int analyse_args(int argc, char **argv)
   return f;  
 }
 
+char *map_file(int f, size_t *len)
+{
+  struct stat buf;
+  fstat(f, &buf);
+  *len = buf.st_size;
+
+  char *addr = mmap(NULL, *len, PROT_READ, MAP_PRIVATE, f, 0);
+  if (addr == MAP_FAILED)
+    perror(NULL);
+  
+  return addr;
+}
+
 int main(int argc, char **argv)
 {
   int f = analyse_args(argc, argv);
+ 
+  size_t len = 0;
+  char *addr = map_file(f, &len);
 
+  enum data_type type;
+  void *res = parse_json(addr, len, &type);
+  res = res;
+/*
+  print_struct(res, type);
+
+  free_struct(res, type);
+*/
   
+  munmap(addr, len);
   close(f);
   return 0;
+
 }
