@@ -15,13 +15,6 @@ enum data_type
   EMPTY
 };
 
-struct string
-{
-  char *data;
-  size_t len;
-};
-
-
 void eat(char *addr, char c);
 void *parse_json(char *addr, size_t len, enum data_type *type);
 
