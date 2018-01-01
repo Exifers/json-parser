@@ -3,10 +3,10 @@ Quick home-made json parser into C structures. This is some very basic program,
 threre's no warranty.
 
 # Prerequisites
--GNU/Linux
--glibc
--gcc
--make
+- GNU/Linux
+- glibc
+- gcc
+- make
 
 # How to compile ?
 Type *make* to produce binary *main*.
@@ -83,7 +83,7 @@ Returns the size of the list.
 Prints the structure on standard output.
 
 # Bugs / Todo
--Only integers are supported for numbers.
+- Only integers are supported for numbers.
 
 # Licence
 Public domaine
