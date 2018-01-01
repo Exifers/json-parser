@@ -103,7 +103,7 @@ void print_data(void *data, enum data_type type);
 - Add a data_type pointer with get_item functions.
 
 # Licence
-Public domaine
+Public domain
 
 # Authors
 Exifers, Dec 2017
