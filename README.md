@@ -1,35 +1,35 @@
-# json-parser
+# Json-parser
 Quick home-made json parser into C structures. This is some very basic program,
 threre's no warranty.
 
-# Prerequisites
+# Usage
+## Prerequisites
 - GNU/Linux
 - glibc
 - gcc
 - make
-
-# How to compile ?
+## Compile
 Type *make* to produce binary *main*.
-
-# Usage
+## Run
 *./main \<filename.json\>*
 Outputs the formatted json, or raise an error if input is incorrect.
-
-# Include in an existing project
+## Include in an existing project
 You can remove src/main.c and src/main.h. Everything else in the src/ folder
 is needed.
 
 # API
-{  } objects are named dict (for dictionaries).
+{  } objects are named dict (for dictionaries).  
 [  ] arrays are named llist (for linked lists).
 
 ## parse file and free structure
 ```c
 #include "src/parser/parser.h"
+
+/** Parses the input string of length len into a C structure whose type is given
+** by the type variable after calling this function. */
 void *parse_json(char *string, size_t len, enum data_type *type);
 ```
-Parses the input string of length len into a C structure whose type is given
-by the type variable after calling this function.
+
 The data\_type enum is the following :
 ```c
 enum data_type
@@ -52,43 +52,50 @@ LIST, but this is handled by this program anyway.
 #include "src/parser/parser.h"
 #include "src/free/free.h"
 
+/** Frees everything returned from parse\_json. data must be the pointer returned
+**  by parse\_json, and type the enum set by parse\_json. */
 void free_data(void *data, enum data_type type);
 ```
-Frees everything returned from parse\_json. data must be the pointer returned
-by parse\_json, and type the enum set by parse\_json.
 
 ## browse the structure
 ```c
 #include "src/dict/dict.h"
 
+/** Returns a pointer to the key*s value, NULL if key is not found. */
 void *dict_get_item(struct dict *d, char *key);
 ```
-Returns a pointer to the key*s value, NULL if key is not found.
+
 ```c
+#include "src/dict/dict.h"
+
+/** Returns the size of the dictionary. */
 size_t dict_get_size(struct dict *d);
 ```
-Returns the size of the dictionary.
+
 ```c
 #include "src/llist/llist.h"
 
+/** 
+Returns a pointer to element at index, raises an error if index exceeds list's
+size. */
 void *llist_get_item(struct llist *l, size_t index);
 ```
-Returns a pointer to element at index, raises an error if index exceeds list's
-size.
+
 ```c
+#include "src/llist/llist.h"
+
+/** Returns the size of the list. */
 size_t llist_get_size(struct llist *l);
 ```
-Returns the size of the list.
 
 ## print the structure
 ```c
 #include "src/display/display.h"
 #include "src/parser/parser.h"
 
+/** Prints the structure on standard output. */
 void print_data(void *data, enum data_type type);
 ```
-
-Prints the structure on standard output.
 
 # Bugs / Todo
 - Only integers are supported for numbers.
