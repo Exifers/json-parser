@@ -87,7 +87,7 @@ void *llist_get_item(struct llist *l, size_t index);
 /** Returns the size of the list. */
 size_t llist_get_size(struct llist *l);
 ```
-Note that all values are pointers, so with numbers the get\_item functions will return a pointer to integer. For *null*, *true*, and *false* constants the returned value is *NULL*.
+Note that all values are pointers, so with numbers the get\_item functions will return a pointer to integer. For *null*, *true*, and *false* constants the returned value is *NULL*. See Bugs/Todo section below.
 
 ## print the structure
 ```c
@@ -100,6 +100,7 @@ void print_data(void *data, enum data_type type);
 
 # Bugs / Todo
 - Only integers are supported for numbers.
+- Add a data_type pointer with get_item functions.
 
 # Licence
 Public domaine
