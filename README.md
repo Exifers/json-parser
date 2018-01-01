@@ -52,8 +52,8 @@ LIST, but this is handled by this program anyway.
 #include "src/parser/parser.h"
 #include "src/free/free.h"
 
-/** Frees everything returned from parse\_json. data must be the pointer returned
-**  by parse\_json, and type the enum set by parse\_json. */
+/** Frees everything returned from parse_json. data must be the pointer returned
+**  by parse_json, and type the enum set by parse_json. */
 void free_data(void *data, enum data_type type);
 ```
 
