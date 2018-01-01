@@ -22,13 +22,13 @@ is needed.
 
 ## parse file and free structure
 
-\#include "src/parser/parser.h"
+    #include "src/parser/parser.h"
 
-void \*parse\_json(char \*string, size\_t len, enum data\_type &type);
+    void *parse_json(char *string, size_t len, enum data_type *type);
 Parses the input string of length len into a C structure whose type is given
 by the type variable after calling this function.
 The data\_type enum is the following :
-    enum data\_type
+    enum data_type
     {
       DICT, // dictionnary
       LIST, // linked list
@@ -44,38 +44,38 @@ Your json file may not contain much things if the returned type is not DICT or
 LIST, but this is handled by this program anyway.
 
 
-    \#include "src/parser/parser.h"
-    \#include "src/free/free.h"
+    #include "src/parser/parser.h"
+    #include "src/free/free.h"
 
-    void free\_data(void \*data, enum data\_type type);
+    void free_data(void *data, enum data_type type);
 Frees everything returned from parse\_json. data must be the pointer returned
 by parse\_json, and type the enum set by parse\_json.
 
 ## browse the structure
 
-    \#include "src/dict/dict.h"
+    #include "src/dict/dict.h"
 
-    void \*dict\_get\_item(struct dict \*d, char \*key);
+    void *dict_get_item(struct dict *d, char *key);
 Returns a pointer to the key's value, NULL if key is not found.
 
-    size\_t dict\_get\_size(struct dict \*d);
+    size_t dict_get_size(struct dict *d);
 Returns the size of the dictionary.
 
-    \#include "src/llist/llist.h"
+    #include "src/llist/llist.h"
 
-    void \*llist\_get\_item(struct llist \*l, size\_t index);
+    void *llist_get_item(struct llist *l, size_t index);
 Returns a pointer to element at index, raises an error if index exceeds list's
 size.
 
-    size\_t llist\_get\_size(struct llist \*l);
+    size_t llist_get_size(struct llist *l);
 Returns the size of the list.
 
 ## print the structure
 
-    \#include "src/display/display.h"
-    \#include "src/parser/parser.h"
+    #include "src/display/display.h"
+    #include "src/parser/parser.h"
 
-    void print\_data(void \*data, enum data\_type type);
+    void print_data(void *data, enum data_type type);
 
 # Licence
 Public domaine
