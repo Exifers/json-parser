@@ -3,13 +3,16 @@ Quick home-made json parser into C structures. This is some very basic program,
 threre's no warranty.
 
 # Prerequisites
-GNU/Linux, gcc, make
+-GNU/Linux
+-glibc
+-gcc
+-make
 
 # How to compile ?
-Type 'make', the produced binary is 'main'.
+Type *make* to produce binary *main*.
 
 # Usage
-'./main \<filename.json\>'
+*./main \<filename.json\>*
 Outputs the formatted json, or raise an error if input is incorrect.
 
 # Include in an existing project
@@ -17,7 +20,7 @@ You can remove src/main.c and src/main.h. Everything else in the src/ folder
 is needed.
 
 # API
-{  } objects are named dictionaries.
+{  } objects are named dict (for dictionaries).
 [  ] arrays are named llist (for linked lists).
 
 ## parse file and free structure
@@ -56,7 +59,7 @@ by parse\_json, and type the enum set by parse\_json.
     #include "src/dict/dict.h"
 
     void *dict_get_item(struct dict *d, char *key);
-Returns a pointer to the key's value, NULL if key is not found.
+Returns a pointer to the key*s value, NULL if key is not found.
 
     size_t dict_get_size(struct dict *d);
 Returns the size of the dictionary.
@@ -76,6 +79,11 @@ Returns the size of the list.
     #include "src/parser/parser.h"
 
     void print_data(void *data, enum data_type type);
+
+Prints the structure on standard output.
+
+# Bugs / Todo
+-Only integers are supported for numbers.
 
 # Licence
 Public domaine
