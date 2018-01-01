@@ -9,6 +9,7 @@
 
 #include "parser/parser.h"
 #include "display/display.h"
+#include "free/free.h"
 
 int analyse_args(int argc, char **argv)
 {
@@ -46,9 +47,8 @@ int main(int argc, char **argv)
   void *res = parse_json(addr, len, &type);
 
   print_data(res, type);
-/*
-  free_struct(res, type);
-*/
+
+  free_data(res, type);
   
   munmap(addr, len);
   close(f);

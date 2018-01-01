@@ -49,7 +49,15 @@ void dict_append(struct dict *d, DATA_TYPE data,
   d->size++;
 }
 
-void dict_pop(struct dict *d)
+void dict_pop(struct dict *d
+#if FREE_DATA == 1
+, void (*free_data)(DATA_TYPE data
+#if ADD_TYPE_ENUM == 1
+, TYPE_ENUM type
+#endif
+)
+#endif
+)
 {
   if (!d)
     errx(1, "dictionary is NULL");
@@ -62,7 +70,14 @@ void dict_pop(struct dict *d)
   if (!cur->next)
   {
     #if FREE_DATA == 1
-    free(cur->data);
+    #if ADD_TYPE_ENUM == 1
+    free_data(cur->data, cur->type);
+    #else
+    free_data(cur->data);
+    #endif
+    #endif
+    #if FREE_KEY == 1
+    free(cur->key);
     #endif
     free(cur);
     d->head = NULL;
@@ -74,7 +89,14 @@ void dict_pop(struct dict *d)
     cur = cur->next;
 
   #if FREE_DATA == 1
-  free(cur->next->data);
+  #if ADD_TYPE_ENUM == 1
+  free_data(cur->next->data, cur->type);
+  #else
+  free_data(cur->next->data);
+  #endif
+  #endif
+  #if FREE_KEY == 1
+  free(cur->next->key);
   #endif
   free(cur->next);
   cur->next = NULL;
@@ -105,14 +127,26 @@ size_t dict_get_size(struct dict *d)
   return d->size;
 }
 
-void dict_free(struct dict *d)
+void dict_free(struct dict *d
+#if FREE_DATA == 1
+, void (*free_data)(DATA_TYPE data
+#if ADD_TYPE_ENUM == 1
+, TYPE_ENUM type
+#endif
+)
+#endif
+)
 {
   if (!d)
     errx(1, "dictionary is NULL");
 
   size_t size = d->size;
   for (size_t i = 0; i < size; i++)
-    dict_pop(d);
+    dict_pop(d
+    #if FREE_DATA == 1
+    , free_data
+    #endif
+    );
   free(d);
 }
 
@@ -135,7 +169,6 @@ void dict_print(struct dict *d, int offset, int inc,
   }
 
   struct dict_elt *cur = d->head;
-  print_offset(offset);
   printf("{\n");
   for (size_t i = 0; i < d->size; i++)
   {

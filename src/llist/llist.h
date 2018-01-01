@@ -41,15 +41,36 @@ struct llist
 };
 
 struct llist *llist_init(void);
+
 void llist_append(struct llist *l, LLIST_DATA_TYPE data
                   #if LLIST_ADD_TYPE_ENUM == 1
                   , LLIST_TYPE_ENUM type
                   #endif
                   );
-LLIST_DATA_TYPE llist_pop(struct llist *l);
+
+void llist_pop(struct llist *l
+               #if LLIST_FREE_DATA == 1
+               , void (*free_data)(LLIST_DATA_TYPE data
+               #if LLIST_ADD_TYPE_ENUM == 1
+               , LLIST_TYPE_ENUM type
+               #endif
+               )
+               #endif
+               );
+
 LLIST_DATA_TYPE llist_get_item(struct llist *l, size_t index);
 size_t llist_get_size(struct llist *l);
-void llist_free(struct llist *l);
+
+void llist_free(struct llist *l
+#if LLIST_FREE_DATA == 1
+, void (*free_data)(LLIST_DATA_TYPE data
+#if LLIST_ADD_TYPE_ENUM == 1
+, LLIST_TYPE_ENUM type
+#endif
+)
+#endif
+);
+
 void llist_print(struct llist *l, int offset, int inc,
      void (*print_fun)(LLIST_DATA_TYPE data, enum data_type type, int offset));
 

@@ -47,7 +47,15 @@ void llist_append(struct llist *l, LLIST_DATA_TYPE data
   l->size++;
 }
 
-LLIST_DATA_TYPE llist_pop(struct llist *l)
+void llist_pop(struct llist *l
+#if LLIST_FREE_DATA == 1
+, void (*free_data)(LLIST_DATA_TYPE data
+#if LLIST_ADD_TYPE_ENUM == 1
+, LLIST_TYPE_ENUM type
+#endif
+)
+#endif
+)
 {
   if (!l)
     errx(1, "linked list is NULL");
@@ -55,31 +63,35 @@ LLIST_DATA_TYPE llist_pop(struct llist *l)
   struct llist_elt *cur = l->head;
 
   if (!cur)
-    return LLIST_NULL_DATA;
+    return;
 
   if (!cur->next)
   {
-    LLIST_DATA_TYPE ret = cur->data;
-    #if LLIST_FREE_DATA != 0
-    free(cur->data);
+    #if LLIST_FREE_DATA == 1
+    #if LLIST_ADD_TYPE_ENUM == 1
+    free_data(cur->data, cur->type);
+    #else
+    free_data(cur->data);
+    #endif
     #endif
     free(cur);
     l->head = NULL;
     l->size--;
-    return ret;
+    return;
   }
 
   while(cur->next->next)
     cur = cur->next;
-  LLIST_DATA_TYPE ret = cur->next->data;
-  #if LLIST_FREE_DATA != 0
-  free(cur->next->data);
+  #if LLIST_FREE_DATA == 1
+  #if LLIST_ADD_TYPE_ENUM == 1
+  free_data(cur->next->data, cur->next->type);
+  #else
+  free_data(cur->next->data);
+  #endif
   #endif
   free(cur->next);
   cur->next = NULL;
   l->size--;
-
-  return ret;
 }
 
 LLIST_DATA_TYPE llist_get_item(struct llist *l, size_t index)
@@ -105,14 +117,27 @@ size_t llist_get_size(struct llist *l)
   return l->size;
 }
 
-void llist_free(struct llist *l)
+
+void llist_free(struct llist *l
+#if LLIST_FREE_DATA == 1
+, void (*free_data)(LLIST_DATA_TYPE data
+#if LLIST_ADD_TYPE_ENUM == 1
+, LLIST_TYPE_ENUM type
+#endif
+)
+#endif
+)
 {
   if (!l)
     errx(1, "linked list is NULL");
 
   size_t size = l->size;
   for (size_t i = 0; i < size; i++)
-    llist_pop(l);
+    llist_pop(l
+    #if LLIST_FREE_DATA == 1
+    , free_data
+    #endif
+    );
   free(l);
 }
 
@@ -135,10 +160,10 @@ void llist_print(struct llist *l, int offset, int inc,
   }
 
   struct llist_elt *cur = l->head;
-  print_offset(offset);
   printf("[\n");
   for (size_t i = 0; i < l->size; i++)
   {
+    print_offset(offset + inc);
     print_fun(cur->data, cur->type, offset + inc);
     if (i != l->size - 1)
       printf(",");

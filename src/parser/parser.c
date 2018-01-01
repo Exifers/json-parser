@@ -1,22 +1,21 @@
-#include <stddef.h>
 #include <ctype.h>
 #include <err.h>
-#include <stdlib.h>
+#include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "parser.h"
-#include "../utils/digits.h"
-#include "../llist/llist.h"
 #include "../dict/dict.h"
+#include "../llist/llist.h"
+#include "../utils/digits.h"
+#include "parser.h"
 
 static void *parse_value(char *addr, size_t len, enum data_type *type);
 static char *parse_string(char *addr, size_t len);
 static int *parse_number(char *addr, size_t len);
 static struct dict *parse_dict(char *addr, size_t len);
 static struct llist *parse_list(char *addr, size_t len);
-static void *parse_true(char *addr, size_t len);
-static void *parse_false(char *addr, size_t len);
-static void *parse_null(char *addr, size_t len);
+static void *parse_token(char *addr, size_t len, char *token);
 
 size_t index;
 
@@ -40,25 +39,17 @@ static void skip_blanks(char *addr, size_t len)
   }
 }
 
-static void *parse_null(char *addr, size_t len)
+static void *parse_token(char *addr, size_t len, char *token)
 {
-  addr = addr;
-  len = len;
-  return NULL;
-}
-
-static void *parse_false(char *addr, size_t len)
-{
-  addr = addr;
-  len = len;
-  return NULL;
-}
-
-static void *parse_true(char *addr, size_t len)
-{
-  addr = addr;
-  len = len;
-  return NULL;
+  size_t token_len = strlen(token);
+  if (index + token_len > len)
+    errx(1, "Unterminated tokenen");
+  if (strncmp(addr + index, token, token_len) == 0)
+  {
+    index += token_len;
+    return NULL;
+  }
+  errx(1, "Incorrect token");
 }
 
 static struct llist *parse_list(char *addr, size_t len)
@@ -192,17 +183,17 @@ static void *parse_value(char *addr, size_t len, enum data_type *type)
   else if (addr[index] == 't')
   {
     *type = TRUE;
-    return parse_true(addr, len);
+    return parse_token(addr, len, "true");
   }
   else if (addr[index] == 'f')
   {
     *type = FALSE;
-    return parse_false(addr, len);
+    return parse_token(addr, len, "false");
   }
   else if (addr[index] == 'n')
   {
     *type = NUL;
-    return parse_null(addr, len);
+    return parse_token(addr, len, "null");
   }
   errx(1, "Incorrect format: first character is incorrect");
   return NULL;

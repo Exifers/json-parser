@@ -10,6 +10,9 @@
 /* Free data while freeing the dict or popping if set to 1 */
 #define FREE_DATA 1
 
+/* Free key while freeing the dict or popping if set to 1 */
+# define FREE_KEY 1
+
 #include "../parser/parser.h"
 /* If DATA_TYPE is 'void *', it might be handy to store an enum in dictonary
 ** elements to know into which type of data the data field points, to do this
@@ -47,10 +50,26 @@ void dict_append(struct dict *d, DATA_TYPE data,
                  TYPE_ENUM type,
                  #endif
                  char *key);
-void dict_pop(struct dict *d);
+void dict_pop(struct dict *d
+              #if FREE_DATA == 1
+              , void (*free_data)(DATA_TYPE data
+              #if ADD_TYPE_ENUM == 1
+              , TYPE_ENUM type
+              #endif
+              )
+              #endif
+              );
 DATA_TYPE dict_get_item(struct dict *d, char *key);
 size_t dict_get_size(struct dict *d);
-void dict_free(struct dict *d);
+void dict_free(struct dict *d
+#if FREE_DATA == 1
+, void (*free_data)(DATA_TYPE data
+#if ADD_TYPE_ENUM == 1
+, TYPE_ENUM type
+#endif
+)
+#endif
+);
 void dict_print(struct dict *d, int offset, int inc,
      void (*print_fun)(DATA_TYPE data, enum data_type type, int offset));
 
