@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 
 #include "parser/parser.h"
+#include "display/display.h"
 
 int analyse_args(int argc, char **argv)
 {
@@ -43,10 +44,9 @@ int main(int argc, char **argv)
 
   enum data_type type;
   void *res = parse_json(addr, len, &type);
-  res = res;
-/*
-  print_struct(res, type);
 
+  print_data(res, type);
+/*
   free_struct(res, type);
 */
   
