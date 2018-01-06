@@ -17,7 +17,7 @@
 ** specified in LLIST_TYPE_ENUM.
 **
 ** --------------------------------------------------------------------
-** | You have to include your own header to declare the enum as well |
+** | You have to include your own header to declare the enum as well  |
 ** --------------------------------------------------------------------
 */
 #define LLIST_ADD_TYPE_ENUM 1
