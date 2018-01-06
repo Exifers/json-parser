@@ -5,15 +5,15 @@
 #include "display.h"
 #include "../parser/parser.h"
 
-static void print_data_recur(void *data, enum data_type type, int offset)
+static void print_data_recur(void *data, int type, int offset, int inc)
 {
   switch ((int) type)
   {
     case DICT:
-      dict_print(data, offset, 2, print_data_recur);
+      dict_print(data, offset, inc, print_data_recur);
       break;
     case LIST:  
-      llist_print(data, offset, 2, print_data_recur);
+      llist_print(data, offset, inc, print_data_recur);
       break;
     case STRING:
       printf("\"%s\"", (char *) data);
@@ -38,6 +38,6 @@ static void print_data_recur(void *data, enum data_type type, int offset)
 
 void print_data(void *data, enum data_type type)
 {
-  print_data_recur(data, type, 0);
+  print_data_recur(data, type, 0, 2);
   printf("\n");  
 }

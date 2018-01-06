@@ -5,9 +5,9 @@
 #include "../parser/parser.h"
 #include "free.h"
 
-void free_data(void *data, enum data_type type)
+void free_data(void *data, int type)
 {
-  switch ((int) type)
+  switch (type)
   {
     case DICT:
       dict_free(data, free_data);
